@@ -3,7 +3,7 @@ This fork shows how to modify an existing stdio MCP server into production level
 
 # Prerequisite:
 1. Create a Cognito User Pool with "Machine-to-machine application" type, and note down the client_id and token_endpoint. You can find the sample code to get the bearer token after created.
-![Cognito config page](./asset/cognito-info.png)
+![Cognito config page](./cognito-info.png)
 2. pip install bedrock_agentcore_starter_toolkit
 
 # Steps:

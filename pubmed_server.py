@@ -1,14 +1,14 @@
 from typing import Any, List, Dict, Optional, Union
 import asyncio
 import logging
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 from pubmed_web_search import search_key_words, search_advanced, get_pubmed_metadata, download_full_text_pdf, deep_paper_analysis
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Initialize FastMCP server
-mcp = FastMCP("pubmed")
+mcp = FastMCP("pubmed",host="0.0.0.0", stateless_http=True)
 
 @mcp.tool()
 async def search_pubmed_key_words(key_words: str, num_results: int = 10) -> List[Dict[str, Any]]:
@@ -133,4 +133,4 @@ async def deep_paper_analysis(pmid: Union[str, int]) -> Dict[str, str]:
 if __name__ == "__main__":
     logging.info("Starting PubMed MCP server")
     # Initialize and run the server
-    mcp.run(transport='stdio')
+    mcp.run(transport='streamable-http')

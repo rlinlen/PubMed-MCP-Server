@@ -1,3 +1,38 @@
+# Purpose
+This fork shows how to modify an existing stdio MCP server into production level MCP server using streamable-http, and deploy it to Amazon Bedrock AgentCore.
+
+# Prerequisite:
+1. Create a Cognito User Pool with "Machine-to-machine application" type, and note down the client_id and token_endpoint. You can find the sample code to get the bearer token after created.
+![Cognito config page](./asset/cognito-info.png)
+2. pip install bedrock_agentcore_starter_toolkit
+
+# Steps:
+1. Update the mcp(pubmed_server.py) to use fastmcp
+```
+from fastmcp import FastMCP
+```
+2. Update the mcp(pubmed_server.py) to use streamable-http:
+```
+mcp = FastMCP("pubmed",host="0.0.0.0", stateless_http=True)
+
+mcp.run(transport='streamable-http')
+```
+3. Update and run agentcore_configure.py
+Update the parameter from Cognito:
+- client_id
+- pool_id
+```
+python agentcore_configure.py
+```
+
+Your mcp server will be available at: https://bedrock-agentcore.{region}.amazonaws.com/runtimes/{encoded_arn}/invocations?qualifier=DEFAULT
+- Make sure to URL-encode your agent runtime ARN when constructing the endpoint URL. The colon (:) characters become %3A and forward slashes (/) become %2F in the encoded URL.
+- Add your Bearer token under authentication
+
+# Reference
+For more info on how to invoke and configure the mcp server on AgentCore, please refer to: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-mcp.html
+===
+
 [![MseeP.ai Security Assessment Badge](https://mseep.net/pr/jackkuo666-pubmed-mcp-server-badge.png)](https://mseep.ai/app/jackkuo666-pubmed-mcp-server)
 
 # PubMed MCP Server
